@@ -28,9 +28,6 @@ export default Marionette.View.extend({
   onSubmit: function(evt) {
     evt.preventDefault();
   },
-  setInputValue(inputUi, value) {
-    this.ui[inputUi].val()
-  },
   fillInAddress() {
     var place = this.autocomplete.getPlace();
     for (var i = 0; i < place.address_components.length; i++) {

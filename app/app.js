@@ -1,12 +1,12 @@
-import {Marionette} from '../vendor/vendor';
-import FormView from './form/form.component';
+import { Marionette } from '../vendor/vendor';
+import RootView from './root/root.component';
 
 export default Marionette.Application.extend({
-  region: '#app',
+  region: '[data-region="app"]',
 
   initialize() {
     this.on('start', () => {
-      this.showView(new FormView());
+      this.showView(new RootView());
     })
   }
 });

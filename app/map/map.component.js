@@ -10,13 +10,25 @@ export default Marionette.View.extend({
   onRender() {
     this.createMap();
   },
+  initialize() {
+    this.directionsService = new google.maps.DirectionsService;
+    this.directionsDisplay = new google.maps.DirectionsRenderer;
+  },
   createMap() {
     this.map = new google.maps.Map(this.el, {
-      zoom: 3,
-      center: {lat: 41.85, lng: -87.65}
+      zoom: 15,
+      center: { lat: -23.585816, lng: -46.682626 }
     });
+    this.directionsDisplay.setMap(this.map);
   },
   onChangePlace() {
 
+  },
+  calculateAndDisplayRoute() {
+    // this.directionsService.route({
+    // origin: ,
+    // destination: ,
+    // travelMode: 'DRIVING'
+  // });
   },
 });

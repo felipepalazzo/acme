@@ -3,12 +3,15 @@ var source = require('vinyl-source-stream');
 var buffer = require('vinyl-buffer');
 var browserify = require('browserify');
 var browserSync = require('browser-sync').create();
+var concat = require('gulp-concat');
+var uglify = require('gulp-uglify');
 
 var watch = function() {
   browserSync.init({
     server: './public'
   });
   gulp.watch('app/**/*', ['build']);
+  gulp.watch('lib/**/*', ['scripts']);
   gulp.watch('public/*').on('change', browserSync.reload);
 };
 
@@ -43,6 +46,14 @@ var start = function() {
   build();
   watch();
 };
+
+gulp.task('scripts', function() {
+  return gulp.src(['node_modules/jquery/dist/jquery.js', './lib/**/*.js'])
+    // .pipe(buffer())
+    .pipe(concat('main.min.js'))
+    .pipe(uglify())
+    .pipe(gulp.dest('./public/scripts'));
+});
 
 gulp.task('build', function() { return build(); });
 gulp.task('start', function() { return start(); });

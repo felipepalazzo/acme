@@ -14,21 +14,24 @@ export default Marionette.View.extend({
     this.drawCircle();
   },
   initialize() {
-    this.coords = ACME_COORDINATES;
-    this.latLng = new google.maps.LatLng({ lat: this.coords.lat, lng: this.coords.lng });
+    var coords = ACME_COORDINATES;
+    this.latLng = new google.maps.LatLng({ lat: coords.lat, lng: coords.lng });
     this.directionsService = new google.maps.DirectionsService;
     this.directionsDisplay = new google.maps.DirectionsRenderer;
     this.defaultOpts = {
-      zoom: 15,
+      zoom: 14,
       maxDistance: 4000,
+      opacity: .5,
     };
   },
   createMap() {
     this.map = new google.maps.Map(this.el, {
       zoom: this.defaultOpts.zoom,
-      center: { lat: this.coords.lat, lng: this.coords.lng }
+      center: this.latLng,
     });
-    this.directionsDisplay.setMap(this.map);
+  },
+  setZoom(number) {
+    this.map.setZoom(number);
   },
   drawCircle() {
     this.circle = new google.maps.Circle({
@@ -36,7 +39,21 @@ export default Marionette.View.extend({
       radius: this.defaultOpts.maxDistance,
       center: this.latLng,
       fillColor: 'red',
-      strokeColor: 'orange',
+      fillOpacity: 0,
+      strokeColor: '#c11111',
+      strokeOpacity: 0,
+    });
+  },
+  showCircle() {
+    this.circle.setOptions({
+      fillOpacity: this.defaultOpts.opacity,
+      strokeOpacity: this.defaultOpts.opacity
+    });
+  },
+  hideCircle() {
+    this.circle.setOptions({
+      fillOpacity: 0,
+      strokeOpacity: 0
     });
   },
   onChangeFormattedAddress() {
@@ -58,19 +75,40 @@ export default Marionette.View.extend({
         if (response.error_message) {
           console.log(response.error_message);
         } else {
-          this.model.set('location', response.results[0].geometry.location);
+          var location = response.results[0].geometry.location;
+          var latLng = new google.maps.LatLng({ lat: location.lat, lng: location.lng });
+          this.model.set('location', latLng);
         }
       }.bind(this));
   },
-  isWithinTheCircle(latLng) {
-    var latLngObj = new google.maps.LatLng({ lat: latLng.lat, lng: latLng.lng });
-    return google.maps.geometry.spherical.computeDistanceBetween(latLngObj, this.latLng) <= this.defaultOpts.maxDistance;
+  showDirections() {
+    this.directionsDisplay.setMap(this.map);
+    this.directionsService.route({
+      origin: this.latLng,
+      destination: this.model.get('location'),
+      travelMode: 'DRIVING'
+    }, function(response, status) {
+      if (status === 'OK') {
+        this.directionsDisplay.setDirections(response);
+      } else {
+        console.error('Directions request failed due to ' + status);
+      }
+    }.bind(this));
+  },
+  hideDirections() {
+    this.directionsDisplay.setMap(null);
+  },
+  isWithinTheCircle() {
+    return google.maps.geometry.spherical.computeDistanceBetween(this.model.get('location'), this.latLng) <= this.defaultOpts.maxDistance;
   },
   onChangeLocation() {
-    if (this.isWithinTheCircle(this.model.get('location'))) {
-      console.log('inside location');
+    if (this.isWithinTheCircle()) {
+      this.hideCircle();
+      this.showDirections();
     } else {
-      console.log('out location');
+      this.showCircle();
+      this.setZoom(this.defaultOpts.zoom - 1);
+      this.hideDirections();
     }
   },
 });

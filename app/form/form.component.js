@@ -48,18 +48,19 @@ export default Marionette.View.extend({
     var formValues = $(evt.target).serializeObject();
     this.model.set(formValues);
     if (this.model.isValid(true)) {
-      this.triggerMethod('submit:form', this.model);
+      this.model.set('formatted_address', this.place.formatted_address);
+      // this.triggerMethod('submit:form', this.model);
     }
   },
   showErrorMsg() {
     this.ui.alert.removeClass('hidden');
   },
   fillInAddress() {
-    this.model.set('place', this.autocomplete.getPlace());
-    for (var i = 0; i < this.model.get('place').address_components.length; i++) {
-      var addressType = this.model.get('place').address_components[i].types[0];
+    this.place = this.autocomplete.getPlace();
+    for (var i = 0; i < this.place.address_components.length; i++) {
+      var addressType = this.place.address_components[i].types[0];
       if (this.addressInputs.includes(addressType)) {
-        var val = this.model.get('place').address_components[i].short_name;
+        var val = this.place.address_components[i].short_name;
         this.$('#' + addressType).val(val);
       }
     }

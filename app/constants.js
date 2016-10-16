@@ -7,5 +7,7 @@ export const SP_COORDINATES = {
 
 export const ACME_COORDINATES = {
   lat: -23.5842987,
-  lgn: -46.6812884
+  lng: -46.6812884
 };
+
+export const API_KEY = 'AIzaSyBUWrk-7hMzxkYfmv5_vUkC1Txs1h29Wjs';

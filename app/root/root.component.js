@@ -1,4 +1,4 @@
-import { Backbone, Marionette } from '../../vendor/vendor';
+import { Marionette } from '../../vendor/vendor';
 import template from './root.template.jst.ejs';
 import FormModel from '../form/form.model';
 import FormView from '../form/form.component';
@@ -11,20 +11,21 @@ export default Marionette.View.extend({
     sideBarRegion: '[data-region="side-bar"]',
     mapRegion: '[data-region="map"]',
   },
-  childViewEvents: {
-    'submit:form': 'onSubmitForm',
+  // childViewEvents: {
+  //   'submit:form': 'onSubmitForm',
+  // },
+  initialize() {
+    this.formModel = new FormModel();
   },
   onRender() {
     this.showSideBar();
     this.showMap();
   },
   showSideBar(model) {
-    var form = new FormModel();
-    this.showChildView('sideBarRegion', new FormView({ model: form }));
+    this.showChildView('sideBarRegion', new FormView({ model: this.formModel }));
   },
   showMap(model) {
-    this.map = new Backbone.Model();
-    this.showChildView('mapRegion', new MapView({ model: this.map }));
+    this.showChildView('mapRegion', new MapView({ model: this.formModel }));
   },
   onSubmitForm(childModel) {
     this.map.set('place', childModel.get('place'));

@@ -2,18 +2,18 @@ import { Backbone } from '../../vendor/vendor';
 
 export default Backbone.Model.extend({
   validation: {
-    name: {
+    'name': {
       required: true,
     },
-    email: {
+    'email': {
       required: true,
       pattern: 'email',
     },
-    route: {
+    'route': {
       required: true,
     },
-    street_number: {
+    'street_number': {
       required: true,
-    }
+    },
   },
 });

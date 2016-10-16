@@ -89,6 +89,8 @@ export default Marionette.View.extend({
       travelMode: 'DRIVING'
     }, function(response, status) {
       if (status === 'OK') {
+        var duration = response.routes[0].legs[0].duration.text;
+        this.showDuration(duration);
         this.directionsDisplay.setDirections(response);
       } else {
         console.error('Directions request failed due to ' + status);
@@ -97,6 +99,9 @@ export default Marionette.View.extend({
   },
   hideDirections() {
     this.directionsDisplay.setMap(null);
+  },
+  showDuration(durationText) {
+
   },
   isWithinTheCircle() {
     return google.maps.geometry.spherical.computeDistanceBetween(this.model.get('location'), this.latLng) <= this.defaultOpts.maxDistance;

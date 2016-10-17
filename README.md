@@ -21,3 +21,4 @@ This is a single page app made with the following libs and frameworks:
 ## Special Notes
 
   * Responsive design :iphone:
+  * Tested on latest versions of Chrome, FF and Safari

@@ -98,7 +98,7 @@ export default Marionette.View.extend({
     }, (response, status) => {
       if (status === 'OK') {
         var duration = response.routes[0].legs[0].duration.text;
-        this.showDuration(duration);
+        this.showDuration('Tempo de entrega:', duration);
         this.directionsDisplay.setDirections(response);
       } else {
         console.error('Directions request failed due to ' + status);
@@ -108,23 +108,20 @@ export default Marionette.View.extend({
   hideDirections() {
     this.directionsDisplay.setMap(null);
   },
-  showDuration(durationText) {
+  showDuration(text, duration) {
     this.showChildView('cardRegion', new CardView({
-      model: new Backbone.Model({ text: durationText })
+      model: new Backbone.Model({ text: text, duration: duration })
     }));
-  },
-  hideDuration() {
-    this.getRegion('cardRegion').reset();
   },
   isWithinTheCircle() {
     return google.maps.geometry.spherical.computeDistanceBetween(this.model.get('location'), this.latLng) <= this.defaultOpts.maxDistanceInMeters;
   },
   onChangeLocation() {
-    this.hideDuration();
     if (this.isWithinTheCircle()) {
       this.hideCircle();
       this.showDirections();
     } else {
+      this.showDuration('Entregas apenas na área destacada');
       this.showCircle();
       this.setZoom(this.defaultOpts.zoom - 1);
       this.hideDirections();

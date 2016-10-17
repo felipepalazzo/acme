@@ -27,10 +27,10 @@ export default Marionette.View.extend({
     this.showSideBar();
     this.showMap();
   },
-  showSideBar(model) {
+  showSideBar() {
     this.showChildView('sideBarRegion', new FormView({ model: this.formModel }));
   },
-  showMap(model) {
+  showMap() {
     this.showChildView('mapRegion', new MapView({ model: this.formModel }));
   },
   onSubmitForm(childModel) {

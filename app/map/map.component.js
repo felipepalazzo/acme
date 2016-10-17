@@ -28,7 +28,7 @@ export default Marionette.View.extend({
     this.directionsDisplay = new google.maps.DirectionsRenderer;
     this.defaultOpts = {
       zoom: 14,
-      maxDistance: 4000,
+      maxDistanceInMeters: 4000,
       opacity: .5,
     };
   },
@@ -44,7 +44,7 @@ export default Marionette.View.extend({
   drawCircle() {
     this.circle = new google.maps.Circle({
       map: this.map,
-      radius: this.defaultOpts.maxDistance,
+      radius: this.defaultOpts.maxDistanceInMeters,
       center: this.latLng,
       fillColor: 'red',
       fillOpacity: 0,
@@ -117,7 +117,7 @@ export default Marionette.View.extend({
     this.getRegion('cardRegion').reset();
   },
   isWithinTheCircle() {
-    return google.maps.geometry.spherical.computeDistanceBetween(this.model.get('location'), this.latLng) <= this.defaultOpts.maxDistance;
+    return google.maps.geometry.spherical.computeDistanceBetween(this.model.get('location'), this.latLng) <= this.defaultOpts.maxDistanceInMeters;
   },
   onChangeLocation() {
     this.hideDuration();

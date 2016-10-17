@@ -5,7 +5,7 @@ import { SP_COORDINATES } from '../constants';
 
 export default Marionette.View.extend({
   template: template,
-  className: 'container-fluid form',
+  className: 'container-fluid form-container',
   ui: {
     'route': '[data-ui="route"]',
     'phone': '[data-ui="phone"]',

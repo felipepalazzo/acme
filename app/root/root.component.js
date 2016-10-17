@@ -11,9 +11,6 @@ export default Marionette.View.extend({
     sideBarRegion: '[data-region="side-bar"]',
     mapRegion: '[data-region="map"]',
   },
-  // childViewEvents: {
-  //   'submit:form': 'onSubmitForm',
-  // },
   initialize() {
     this.formModel = new FormModel();
   },

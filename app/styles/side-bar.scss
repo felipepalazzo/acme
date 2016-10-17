@@ -1,0 +1,10 @@
+.side-bar {
+  position: fixed;
+  width: 300px;
+  height: 100%;
+  background: #425057;
+  -webkit-box-shadow: 10px 0 15px -5px rgba(0,0,0,0.54);
+  -moz-box-shadow: 10px 0 15px -5px rgba(0,0,0,0.54);
+  box-shadow: 10px 0 15px -5px rgba(0,0,0,0.54);
+  z-index: 1;
+}

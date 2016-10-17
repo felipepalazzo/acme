@@ -3,5 +3,5 @@ import template from './card.template.jst.ejs';
 
 export default Marionette.View.extend({
   template: template,
-  className: 'panel panel-default',
+  className: 'card panel panel-default',
 });

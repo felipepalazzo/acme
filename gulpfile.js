@@ -5,12 +5,14 @@ var browserify = require('browserify');
 var browserSync = require('browser-sync').create();
 var concat = require('gulp-concat');
 var uglify = require('gulp-uglify');
+var sass = require('gulp-sass');
 
 var watch = function() {
   browserSync.init({
     server: './public'
   });
   gulp.watch('app/**/*', ['build']);
+  gulp.watch('app/**/*.scss', ['sass']);
   gulp.watch('lib/**/*', ['scripts']);
   gulp.watch('public/*').on('change', browserSync.reload);
 };
@@ -47,9 +49,14 @@ var start = function() {
   watch();
 };
 
+gulp.task('sass', function() {
+  return gulp.src('app/styles/main.scss')
+    .pipe(sass({ outputStyle: 'compressed' }).on('error', sass.logError))
+    .pipe(gulp.dest('public/styles'));
+});
+
 gulp.task('scripts', function() {
   return gulp.src(['node_modules/jquery/dist/jquery.js', './lib/**/*.js'])
-    // .pipe(buffer())
     .pipe(concat('main.min.js'))
     .pipe(uglify())
     .pipe(gulp.dest('./public/scripts'));

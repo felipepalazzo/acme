@@ -11,6 +11,15 @@ export default Marionette.View.extend({
     sideBarRegion: '[data-region="side-bar"]',
     mapRegion: '[data-region="map"]',
   },
+  ui: {
+    mobileBtn: '[data-ui="button"]',
+  },
+  events: {
+    'click @ui.mobileBtn': 'slideForm',
+  },
+  childViewEvents: {
+    'submit:form': 'slideForm',
+  },
   initialize() {
     this.formModel = new FormModel();
   },
@@ -26,5 +35,8 @@ export default Marionette.View.extend({
   },
   onSubmitForm(childModel) {
     this.map.set('place', childModel.get('place'));
+  },
+  slideForm() {
+    this.$('.side-bar').toggleClass('slide');
   },
 });

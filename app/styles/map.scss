@@ -1,6 +1,10 @@
 .map-container {
   width: 100%;
   padding-left: 300px;
+
+  @media #{$all-mobile} {
+    padding-left: 0;
+  }
 }
 
 .map,
@@ -10,4 +14,10 @@
 
 .map-wrap {
   position: relative;
+}
+
+.mobile-button {
+  position: fixed;
+  bottom: 0;
+  border-radius: 0;
 }

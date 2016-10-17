@@ -24,6 +24,12 @@
     position: absolute;
     left: 315px;
     width: 280px;
+
+    @media #{$all-mobile} {
+      width: 270px;
+      left: 15px;
+      top: 405px;
+    }
   }
 
   .route-input {

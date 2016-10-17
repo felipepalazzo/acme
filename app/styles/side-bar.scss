@@ -1,4 +1,5 @@
 .side-bar {
+  transition: transform .3s ease;
   position: fixed;
   width: 300px;
   height: 100%;
@@ -7,4 +8,13 @@
   -moz-box-shadow: 10px 0 15px -5px rgba(0,0,0,0.54);
   box-shadow: 10px 0 15px -5px rgba(0,0,0,0.54);
   z-index: 1;
+
+  @media #{$all-mobile} {
+    transform: translateX(-300px);
+    box-shadow: none;
+
+    &.slide {
+      transform: translateX(0);
+    }
+  }
 }

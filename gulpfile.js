@@ -11,9 +11,7 @@ var watch = function() {
   browserSync.init({
     server: './public'
   });
-  gulp.watch('app/**/*', ['build']);
-  gulp.watch('app/**/*.scss', ['sass']);
-  gulp.watch('lib/**/*', ['scripts']);
+  gulp.watch(['app/**/*', 'lib/**/*'], ['build']);
   gulp.watch('public/*').on('change', browserSync.reload);
 };
 
@@ -29,6 +27,8 @@ var build = function() {
   });
 
   copy();
+  libs();
+  sassy();
 
   return b.bundle()
     .pipe(source('app.js'))
@@ -49,18 +49,18 @@ var start = function() {
   watch();
 };
 
-gulp.task('sass', function() {
+var sassy = function() {
   return gulp.src('app/styles/main.scss')
     .pipe(sass({ outputStyle: 'compressed' }).on('error', sass.logError))
     .pipe(gulp.dest('public/styles'));
-});
+};
 
-gulp.task('scripts', function() {
+var libs = function() {
   return gulp.src(['node_modules/jquery/dist/jquery.js', './lib/**/*.js'])
     .pipe(concat('main.min.js'))
     .pipe(uglify())
     .pipe(gulp.dest('./public/scripts'));
-});
+};
 
 gulp.task('build', function() { return build(); });
 gulp.task('start', function() { return start(); });

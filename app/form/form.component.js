@@ -5,17 +5,20 @@ import { SP_COORDINATES } from '../constants';
 
 export default Marionette.View.extend({
   template: template,
-  className: 'container-fluid',
+  className: 'container-fluid form',
   ui: {
     'route': '[data-ui="route"]',
     'phone': '[data-ui="phone"]',
     'alert': '[data-ui="alert"]',
+    'close': '[data-ui="close"]',
   },
   modelEvents: {
     'validated:invalid': 'showErrorMsg',
+    'validated:valid': 'removeErrorMsg',
   },
   events: {
     'submit': 'onSubmit',
+    'click @ui.close': 'removeErrorMsg',
   },
   addressInputs: [
     'street_number',
@@ -38,7 +41,9 @@ export default Marionette.View.extend({
     );
     this.autocomplete = new google.maps.places.Autocomplete(
       this.ui.route[0], { types: ['geocode'], bounds: defaultBounds, componentRestrictions: { country: 'br' } });
-    this.autocomplete.addListener('place_changed', this.fillInAddress.bind(this));
+    this.autocomplete.addListener('place_changed', () => {
+      this.fillInAddress();
+    });
   },
   initPhoneMask() {
     $.fn.mask.call(this.ui.phone, '(99) 9999-9999');
@@ -49,11 +54,14 @@ export default Marionette.View.extend({
     this.model.set(formValues);
     if (this.model.isValid(true)) {
       this.model.set('formatted_address', this.place.formatted_address);
-      // this.triggerMethod('submit:form', this.model);
+      this.triggerMethod('submit:form', this.model);
     }
   },
   showErrorMsg() {
     this.ui.alert.removeClass('hidden');
+  },
+  removeErrorMsg() {
+    this.ui.alert.addClass('hidden');
   },
   fillInAddress() {
     this.place = this.autocomplete.getPlace();

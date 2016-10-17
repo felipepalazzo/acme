@@ -1,13 +1,21 @@
 /* globals google */
-import { Marionette } from '../../vendor/vendor';
+import { Backbone, Marionette } from '../../vendor/vendor';
 import { ACME_COORDINATES, API_KEY } from '../constants';
+import template from './map.template.jst.ejs';
+import CardView from '../card/card.component';
 
 export default Marionette.View.extend({
-  template: false,
-  className: 'map',
+  template: template,
+  className: 'map-wrap full-height',
   modelEvents: {
     'change:formatted_address': 'onChangeFormattedAddress',
     'change:location': 'onChangeLocation',
+  },
+  ui: {
+    mapEl: '[data-ui="map"]',
+  },
+  regions: {
+    cardRegion: '[data-region="card"]',
   },
   onRender() {
     this.createMap();
@@ -25,7 +33,7 @@ export default Marionette.View.extend({
     };
   },
   createMap() {
-    this.map = new google.maps.Map(this.el, {
+    this.map = new google.maps.Map(this.ui.mapEl[0], {
       zoom: this.defaultOpts.zoom,
       center: this.latLng,
     });
@@ -71,7 +79,7 @@ export default Marionette.View.extend({
       .fail(function() {
         console.error('Oops! geocode went wrong');
       })
-      .done(function(response) {
+      .done((response) => {
         if (response.error_message) {
           console.log(response.error_message);
         } else {
@@ -79,7 +87,7 @@ export default Marionette.View.extend({
           var latLng = new google.maps.LatLng({ lat: location.lat, lng: location.lng });
           this.model.set('location', latLng);
         }
-      }.bind(this));
+      });
   },
   showDirections() {
     this.directionsDisplay.setMap(this.map);
@@ -87,7 +95,7 @@ export default Marionette.View.extend({
       origin: this.latLng,
       destination: this.model.get('location'),
       travelMode: 'DRIVING'
-    }, function(response, status) {
+    }, (response, status) => {
       if (status === 'OK') {
         var duration = response.routes[0].legs[0].duration.text;
         this.showDuration(duration);
@@ -95,18 +103,24 @@ export default Marionette.View.extend({
       } else {
         console.error('Directions request failed due to ' + status);
       }
-    }.bind(this));
+    });
   },
   hideDirections() {
     this.directionsDisplay.setMap(null);
   },
   showDuration(durationText) {
-
+    this.showChildView('cardRegion', new CardView({
+      model: new Backbone.Model({ text: durationText })
+    }));
+  },
+  hideDuration() {
+    this.getRegion('cardRegion').reset();
   },
   isWithinTheCircle() {
     return google.maps.geometry.spherical.computeDistanceBetween(this.model.get('location'), this.latLng) <= this.defaultOpts.maxDistance;
   },
   onChangeLocation() {
+    this.hideDuration();
     if (this.isWithinTheCircle()) {
       this.hideCircle();
       this.showDirections();

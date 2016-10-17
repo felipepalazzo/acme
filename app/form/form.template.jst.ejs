@@ -1,14 +1,30 @@
-<input type="text" data-ui="route" class="route">
+<div class="text-center"><h2 class="text-grey">Acme</h2></div>
+<div class="hidden alert alert-danger" data-ui="alert">
+  <button type="button" data-ui="close" class="close">&times;</button>
+  <small>Favor preencher os campos obrigatórios</small>
+</div>
+<input type="text" data-ui="route" class="route route-input" placeholder="Endereço - ex: Av. Paulista, 210" autocomplete="off">
 <form>
   <fieldset>
-    <div class="hidden alert alert-danger" data-ui="alert"><small>Favor preencher os campos obrigatórios</small></div>
-    <input type="text" name="name" placeholder="Help me for real" class="form-control">
-    <input type="email" name="email" placeholder="Help me for real" class="form-control">
-    <input type="text" name="phone" placeholder="Help me for real" class="form-control" data-ui="phone">
-    <input type="text" name="route" placeholder="Help me for real" class="form-control" id="route">
-    <input type="text" name="street_number" placeholder="Help me for real" class="form-control" id="street_number">
-    <input type="text" name="postal_code" placeholder="Help me for real" class="form-control" id="postal_code">
-    <input type="text" name="sublocality_level_1" placeholder="Help me for real" class="form-control" id="sublocality_level_1">
-    <button class="btn btn-primary">submit</button>
+    <div class="form-group">
+      <input type="text" name="name" placeholder="Nome" class="form-control" required>
+    </div>
+    <div class="form-group">
+      <input type="email" name="email" placeholder="E-mail" class="form-control" required>
+    </div>
+    <div class="form-group">
+      <input type="text" name="phone" placeholder="Telefone" class="form-control" data-ui="phone">
+    </div>
+    <div class="form-group">
+      <input type="text" name="route" class="form-control" id="route" required>
+    </div>
+    <div class="form-group">
+      <input type="text" name="street_number" placeholder="N°" class="form-control" id="street_number">
+      <input type="text" name="postal_code" placeholder="CEP" class="form-control" id="postal_code">
+    </div>
+    <div class="form-group">
+      <input type="text" name="sublocality_level_1" placeholder="Bairro" class="form-control" id="sublocality_level_1">
+    </div>
+    <button class="btn btn-primary btn-block">FAZER PEDIDO!</button>
   </fieldset>
 </form>
